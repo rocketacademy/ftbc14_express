@@ -50,10 +50,10 @@ app.get("/students/", (request, response) => {
 });
 
 // second students/ route handler will never run, as that route is handled by the code above.
-app.get("/students/", (request, response) => {
-  // console.log(request);
-  response.send("Noooo");
-});
+// app.get("/students/", (request, response) => {
+//   // console.log(request);
+//   response.send("Noooo");
+// });
 
 app.get("/students/:name", (request, response) => {
   // console.log(request);
@@ -73,6 +73,25 @@ app.post("/students", (request, response) => {
 
   students.push(newStudent);
 
+  response.send(students);
+});
+
+app.put("/students/:name", (request, response) => {
+  let editedData = request.body;
+  let targetToUpdate = request.params.name;
+  const arrayIndex = students.findIndex(
+    (element) => element.name == targetToUpdate
+  );
+  students.splice(arrayIndex, 1, editedData);
+  response.send(students);
+});
+
+app.delete("/students/:name", (request, response) => {
+  let targetToUpdate = request.params.name;
+  const arrayIndex = students.findIndex(
+    (element) => element.name == targetToUpdate
+  );
+  students.splice(arrayIndex, 1);
   response.send(students);
 });
 
