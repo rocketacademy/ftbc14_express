@@ -8,14 +8,11 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-// handle simple get request '/'
-// crud
-// create - read - update -delete
+const StudentRouter = require("./Routers/StudentRouter");
+const StudentController = require("./Controllers/StudentController");
 
-const students = [
-  { name: "Jeremy", age: 25, course: "Farming" },
-  { name: "Jessica", age: 26, course: "Sociology" },
-];
+const studentController = new StudentController();
+const studentRouter = new StudentRouter(studentController, express);
 
 // inbuilt middleware
 // allows me to send JSON requests to my server - and use the body
@@ -39,66 +36,13 @@ app.use(cors());
 // Applying Sams custom middleware
 app.use(myLoggingFunction);
 
+// we define a router and controller for each set of information that we have in the application
+app.use("/students", studentRouter.route());
+
 app.get("/", (request, response) => {
   // console.log(request);
   response.send("Hello FTBC14");
 });
-
-app.get("/students/", (request, response) => {
-  // console.log(request);
-  response.send(students);
-});
-
-// second students/ route handler will never run, as that route is handled by the code above.
-// app.get("/students/", (request, response) => {
-//   // console.log(request);
-//   response.send("Noooo");
-// });
-
-app.get("/students/:name", (request, response) => {
-  // console.log(request);
-  // console.log(request.params.name);
-  const student = students.filter(
-    (student) => student.name == request.params.name
-  );
-  response.send(student);
-});
-
-// add a new student into out student array
-app.post("/students", (request, response) => {
-  // console.log(request);
-  // console.log(request.body);
-
-  const newStudent = request.body;
-
-  students.push(newStudent);
-
-  response.send(students);
-});
-
-app.put("/students/:name", (request, response) => {
-  let editedData = request.body;
-  let targetToUpdate = request.params.name;
-  const arrayIndex = students.findIndex(
-    (element) => element.name == targetToUpdate
-  );
-  students.splice(arrayIndex, 1, editedData);
-  response.send(students);
-});
-
-app.delete("/students/:name", (request, response) => {
-  let targetToUpdate = request.params.name;
-  const arrayIndex = students.findIndex(
-    (element) => element.name == targetToUpdate
-  );
-  students.splice(arrayIndex, 1);
-  response.send(students);
-});
-
-// Extra challenges / exercises
-// add a new request handler to edit a student from the student array
-
-// add a new request handler to delete a student from the student array
 
 // Example of bad route handling for users - this would result in servers that are too long and not well formatted, use params instead.
 // app.get("/students/Jessica", (request, response) => {
