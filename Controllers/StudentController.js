@@ -78,13 +78,38 @@ class StudentController {
   };
 
   edit = (req, res) => {
-    let editedData = req.body;
-    let targetToUpdate = req.params.name;
-    const arrayIndex = this.students.findIndex(
-      (element) => element.name == targetToUpdate
+    const id = req.params.id;
+    const data = req.body;
+    console.log(data);
+    client.query(
+      `UPDATE students SET name = '${data.name}', gender = ${data.gender}, age = ${data.age}, course = '${data.course}' WHERE id = ${id} RETURNING *;`,
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          throw new Error(error);
+        } else {
+          console.log(results.rows);
+        }
+      }
     );
-    this.students.splice(arrayIndex, 1, editedData);
-    res.send(this.students);
+
+    client.query("SELECT * FROM students;", (error, results) => {
+      if (error) {
+        console.log(error);
+        throw new Error(error);
+      } else {
+        console.log(results.rows);
+        res.send(results.rows);
+      }
+    });
+
+    // let editedData = req.body;
+    // let targetToUpdate = req.params.name;
+    // const arrayIndex = this.students.findIndex(
+    //   (element) => element.name == targetToUpdate
+    // );
+    // this.students.splice(arrayIndex, 1, editedData);
+    // res.send(this.students);
   };
 
   delete = (req, res) => {
