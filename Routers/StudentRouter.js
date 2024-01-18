@@ -10,10 +10,10 @@ class StudentRouter {
     let router = this.express.Router();
 
     router.get("/", this.controller.list);
-    router.get("/:name", this.controller.listOne);
+    router.get("/:id", this.controller.listOne);
     router.post("/", this.controller.add);
-    router.put("/:name", this.controller.edit);
-    router.delete("/:name", this.controller.delete);
+    router.put("/:id", this.controller.edit);
+    router.delete("/:id", this.controller.delete);
 
     return router;
   };

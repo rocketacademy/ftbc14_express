@@ -1,3 +1,16 @@
+const { Client } = require("pg");
+
+const connectionConfiguration = {
+  user: "samoshaughnessy",
+  host: "localhost",
+  database: "ftbc14",
+  port: 5432,
+};
+
+const client = new Client(connectionConfiguration);
+
+client.connect();
+
 class StudentController {
   constructor() {
     this.students = [
@@ -7,20 +20,61 @@ class StudentController {
   }
 
   list = (req, res) => {
-    res.send(this.students);
+    client.query("SELECT * FROM students;", (error, results) => {
+      if (error) {
+        console.log(error);
+        throw new Error(error);
+      } else {
+        console.log(results.rows);
+        res.send(results.rows);
+      }
+    });
+
+    // old list for array
+    // res.send(this.students);
   };
 
   listOne = (req, res) => {
-    const student = this.students.filter(
-      (student) => student.name == req.params.name
-    );
-    res.send(student);
+    const id = req.params.id;
+    const query = `SELECT * FROM students WHERE id = ${id}`;
+
+    const whenQueryDone = (error, results) => {
+      if (error) {
+        console.log(error);
+        throw new Error(error);
+      } else {
+        console.log(results.rows);
+        res.send(results.rows);
+      }
+    };
+
+    client.query(query, whenQueryDone);
+
+    // const student = this.students.filter(
+    //   (student) => student.name == req.params.name
+    // );
+    // res.send(student);
   };
 
   add = (req, res) => {
-    const newStudent = req.body;
-    this.students.push(newStudent);
-    res.send(this.students);
+    console.log(req.body);
+    let data = req.body;
+    client.query(
+      `INSERT INTO students (name, age, course, gender) VALUES ('${data.name}',${data.age},'${data.course}',${data.gender}) RETURNING *;`,
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          throw new Error(error);
+        } else {
+          console.log(results.rows);
+          res.send(results.rows);
+        }
+      }
+    );
+
+    // const newStudent = req.body;
+    // this.students.push(newStudent);
+    // res.send(this.students);
   };
 
   edit = (req, res) => {
@@ -34,12 +88,35 @@ class StudentController {
   };
 
   delete = (req, res) => {
-    let targetToUpdate = req.params.name;
-    const arrayIndex = this.students.findIndex(
-      (element) => element.name == targetToUpdate
+    const id = req.params.id;
+    client.query(
+      `DELETE FROM students WHERE id = ${id} RETURNING *;`,
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          throw new Error(error);
+        } else {
+          console.log(results.rows);
+        }
+      }
     );
-    this.students.splice(arrayIndex, 1);
-    res.send(this.students);
+
+    client.query("SELECT * FROM students;", (error, results) => {
+      if (error) {
+        console.log(error);
+        throw new Error(error);
+      } else {
+        console.log(results.rows);
+        res.send(results.rows);
+      }
+    });
+
+    // let targetToUpdate = req.params.name;
+    // const arrayIndex = this.students.findIndex(
+    //   (element) => element.name == targetToUpdate
+    // );
+    // this.students.splice(arrayIndex, 1);
+    // res.send(this.students);
   };
 }
 
