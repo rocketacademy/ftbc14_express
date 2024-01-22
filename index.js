@@ -8,10 +8,14 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
+const db = require("./db/models/index");
+
+const { user, users_address } = db;
+
 const StudentRouter = require("./Routers/StudentRouter");
 const StudentController = require("./Controllers/StudentController");
 
-const studentController = new StudentController();
+const studentController = new StudentController(user, users_address);
 const studentRouter = new StudentRouter(studentController, express);
 
 // inbuilt middleware

@@ -1,148 +1,80 @@
-const { Client } = require("pg");
-
-const connectionConfiguration = {
-  user: "samoshaughnessy",
-  host: "localhost",
-  database: "ftbc14",
-  port: 5432,
-};
-
-const client = new Client(connectionConfiguration);
-
-client.connect();
-
 class StudentController {
-  constructor() {
-    this.students = [
-      { name: "Jeremy", age: 25, course: "Farming" },
-      { name: "Jessica", age: 26, course: "Sociology" },
-    ];
+  constructor(user, usersAddress) {
+    (this.model = user), (this.userAddress = usersAddress);
   }
 
-  list = (req, res) => {
-    client.query("SELECT * FROM students;", (error, results) => {
-      if (error) {
-        console.log(error);
-        throw new Error(error);
-      } else {
-        console.log(results.rows);
-        res.send(results.rows);
-      }
-    });
-
-    // old list for array
-    // res.send(this.students);
+  list = async (req, res) => {
+    try {
+      const output = await this.model.findAll();
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
   };
 
-  listOne = (req, res) => {
+  listOne = async (req, res) => {
     const id = req.params.id;
-    const query = `SELECT * FROM students WHERE id = ${id}`;
-
-    const whenQueryDone = (error, results) => {
-      if (error) {
-        console.log(error);
-        throw new Error(error);
-      } else {
-        console.log(results.rows);
-        res.send(results.rows);
-      }
-    };
-
-    client.query(query, whenQueryDone);
-
-    // const student = this.students.filter(
-    //   (student) => student.name == req.params.name
-    // );
-    // res.send(student);
+    try {
+      const output = await this.model.findByPk(id);
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
   };
 
-  add = (req, res) => {
-    console.log(req.body);
-    let data = req.body;
-    client.query(
-      `INSERT INTO students (name, age, course, gender) VALUES ('${data.name}',${data.age},'${data.course}',${data.gender}) RETURNING *;`,
-      (error, results) => {
-        if (error) {
-          console.log(error);
-          throw new Error(error);
-        } else {
-          console.log(results.rows);
-          res.send(results.rows);
-        }
-      }
-    );
-
-    // const newStudent = req.body;
-    // this.students.push(newStudent);
-    // res.send(this.students);
+  add = async (req, res) => {
+    try {
+      await this.model.create({
+        first_name: req.body.firstName,
+        last_name: req.body.lastName,
+        email: req.body.email,
+        gender: req.body.gender,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
+      const output = await this.model.findAll();
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
   };
 
-  edit = (req, res) => {
-    const id = req.params.id;
-    const data = req.body;
-    console.log(data);
-    client.query(
-      `UPDATE students SET name = '${data.name}', gender = ${data.gender}, age = ${data.age}, course = '${data.course}' WHERE id = ${id} RETURNING *;`,
-      (error, results) => {
-        if (error) {
-          console.log(error);
-          throw new Error(error);
-        } else {
-          console.log(results.rows);
-        }
-      }
-    );
+  edit = async (req, res) => {
+    try {
+      await this.model.update(
+        {
+          first_name: req.body.firstName,
+          last_name: req.body.lastName,
+          email: req.body.email,
+          gender: req.body.gender,
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        { where: { id: id } }
+      );
 
-    client.query("SELECT * FROM students;", (error, results) => {
-      if (error) {
-        console.log(error);
-        throw new Error(error);
-      } else {
-        console.log(results.rows);
-        res.send(results.rows);
-      }
-    });
+      const output = await this.model.findAll();
 
-    // let editedData = req.body;
-    // let targetToUpdate = req.params.name;
-    // const arrayIndex = this.students.findIndex(
-    //   (element) => element.name == targetToUpdate
-    // );
-    // this.students.splice(arrayIndex, 1, editedData);
-    // res.send(this.students);
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
   };
 
   delete = (req, res) => {
     const id = req.params.id;
-    client.query(
-      `DELETE FROM students WHERE id = ${id} RETURNING *;`,
-      (error, results) => {
-        if (error) {
-          console.log(error);
-          throw new Error(error);
-        } else {
-          console.log(results.rows);
-        }
-      }
-    );
+    try {
+      await this.model.destroy(
+        { where: { id: id } }
+      );
 
-    client.query("SELECT * FROM students;", (error, results) => {
-      if (error) {
-        console.log(error);
-        throw new Error(error);
-      } else {
-        console.log(results.rows);
-        res.send(results.rows);
-      }
-    });
+      const output = await this.model.findAll();
 
-    // let targetToUpdate = req.params.name;
-    // const arrayIndex = this.students.findIndex(
-    //   (element) => element.name == targetToUpdate
-    // );
-    // this.students.splice(arrayIndex, 1);
-    // res.send(this.students);
-  };
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+}
 }
 
 module.exports = StudentController;
