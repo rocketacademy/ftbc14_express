@@ -1,8 +1,14 @@
 "use strict";
 
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {}
+  // console.log("Model", Model.init, Model.findAll);
+  class User extends Model {
+    static associate(models) {
+      this.hasMany(models.users_address);
+    }
+  }
   User.init(
     {
       id: {

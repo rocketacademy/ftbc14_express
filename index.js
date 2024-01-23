@@ -9,7 +9,6 @@ const app = express();
 const cors = require("cors");
 
 const db = require("./db/models/index");
-
 const { user, users_address } = db;
 
 const StudentRouter = require("./Routers/StudentRouter");

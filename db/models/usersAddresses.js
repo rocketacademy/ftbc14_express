@@ -2,39 +2,43 @@
 
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Users_Address extends Model {}
+  class Users_Address extends Model {
+    static associate(models) {
+      this.belongsTo(models.user);
+    }
+  }
   Users_Address.init(
     {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
+        autoIncrement: true,
         type: DataTypes.INTEGER,
       },
       address: {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      userId: {
+      primaryAddress: {
         allowNull: false,
+        type: DataTypes.BOOLEAN,
+      },
+      userId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         references: {
           model: "user",
           key: "id",
         },
       },
-      primaryAddress: {
-        allowNull: false,
-        type: DataTypes.STRING,
-      },
       createdAt: {
-        type: DataTypes.DATE,
         allowNull: false,
+        type: DataTypes.DATE,
         defaultValue: new Date(),
       },
       updatedAt: {
-        type: DataTypes.DATE,
         allowNull: false,
+        type: DataTypes.DATE,
         defaultValue: new Date(),
       },
     },

@@ -15,6 +15,10 @@ class StudentController {
   listOne = async (req, res) => {
     const id = req.params.id;
     try {
+      // const output = await this.model.findAll({where : {
+      //   id: id
+      // }});
+
       const output = await this.model.findByPk(id);
       return res.json(output);
     } catch (err) {
