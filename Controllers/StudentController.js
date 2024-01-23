@@ -61,12 +61,10 @@ class StudentController {
     }
   };
 
-  delete = (req, res) => {
+  delete = async (req, res) => {
     const id = req.params.id;
     try {
-      await this.model.destroy(
-        { where: { id: id } }
-      );
+      await this.model.destroy({ where: { id: id } });
 
       const output = await this.model.findAll();
 
@@ -74,7 +72,7 @@ class StudentController {
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
-}
+  };
 }
 
 module.exports = StudentController;
