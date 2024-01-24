@@ -1,11 +1,15 @@
 class StudentController {
   constructor(user, usersAddress) {
-    (this.model = user), (this.userAddress = usersAddress);
+    this.user = user;
+    this.usersAddress = usersAddress;
   }
 
   list = async (req, res) => {
+    console.log("LIST ME");
     try {
-      const output = await this.model.findAll();
+      console.log(this.user);
+      const output = await this.user.findAll(); // return an array
+      console.log("output", output);
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -19,7 +23,7 @@ class StudentController {
       //   id: id
       // }});
 
-      const output = await this.model.findByPk(id);
+      const output = await this.user.findByPk(id); // return an object
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -27,16 +31,17 @@ class StudentController {
   };
 
   add = async (req, res) => {
+    console.log("posting");
     try {
-      await this.model.create({
-        first_name: req.body.firstName,
-        last_name: req.body.lastName,
+      await this.user.create({
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         email: req.body.email,
         gender: req.body.gender,
-        created_at: new Date(),
-        updated_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
-      const output = await this.model.findAll();
+      const output = await this.user.findAll();
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -44,20 +49,21 @@ class StudentController {
   };
 
   edit = async (req, res) => {
+    const id = req.params.id;
     try {
-      await this.model.update(
+      await this.user.update(
         {
-          first_name: req.body.firstName,
-          last_name: req.body.lastName,
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
           email: req.body.email,
           gender: req.body.gender,
-          created_at: new Date(),
-          updated_at: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
         { where: { id: id } }
       );
 
-      const output = await this.model.findAll();
+      const output = await this.user.findAll();
 
       return res.json(output);
     } catch (err) {
@@ -68,9 +74,9 @@ class StudentController {
   delete = async (req, res) => {
     const id = req.params.id;
     try {
-      await this.model.destroy({ where: { id: id } });
+      await this.user.destroy({ where: { id: id } });
 
-      const output = await this.model.findAll();
+      const output = await this.user.findAll();
 
       return res.json(output);
     } catch (err) {

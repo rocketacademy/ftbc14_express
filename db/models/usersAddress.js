@@ -2,12 +2,12 @@
 
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Users_Address extends Model {
+  class Users_Addresses extends Model {
     static associate(models) {
-      this.belongsTo(models.user);
+      this.belongsTo(models.users);
     }
   }
-  Users_Address.init(
+  Users_Addresses.init(
     {
       id: {
         allowNull: false,
@@ -44,9 +44,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "users_address",
+      modelName: "users_addresses",
       underscored: true,
     }
   );
-  return Users_Address;
+  return Users_Addresses;
 };

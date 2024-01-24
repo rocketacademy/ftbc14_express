@@ -4,12 +4,12 @@ const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   // console.log("Model", Model.init, Model.findAll);
-  class User extends Model {
+  class Users extends Model {
     static associate(models) {
-      this.hasMany(models.users_address);
+      this.hasMany(models.users_addresses);
     }
   }
-  User.init(
+  Users.init(
     {
       id: {
         allowNull: false,
@@ -46,9 +46,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "user",
+      modelName: "users",
       underscored: true,
     }
   );
-  return User;
+  return Users;
 };
