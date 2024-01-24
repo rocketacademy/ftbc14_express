@@ -9,15 +9,27 @@ const app = express();
 const cors = require("cors");
 
 const db = require("./db/models/index");
-const { users, users_addresses } = db;
+const { users, users_addresses, classes, users_classes } = db;
 
 console.log(db);
 
 const StudentRouter = require("./Routers/StudentRouter");
 const StudentController = require("./Controllers/StudentController");
 
-const studentController = new StudentController(users, users_addresses);
+const AddressRouter = require("./Routers/AddressRouter");
+const AddressController = require("./Controllers/AddressController");
+
+const ClassRouter = require("./Routers/ClassRouter");
+const ClassContoller = require("./Controllers/ClassController");
+
+const studentController = new StudentController(users, users_classes, classes);
 const studentRouter = new StudentRouter(studentController, express);
+
+const addressController = new AddressController(users_addresses, users);
+const addressRouter = new AddressRouter(addressController, express);
+
+const classContoller = new ClassContoller(classes);
+const classRouter = new ClassRouter(classContoller, express);
 
 // inbuilt middleware
 // allows me to send JSON requests to my server - and use the body
@@ -43,6 +55,8 @@ app.use(myLoggingFunction);
 
 // we define a router and controller for each set of information that we have in the application
 app.use("/students", studentRouter.route());
+app.use("/addresses", addressRouter.route());
+app.use("/classes", classRouter.route());
 
 app.get("/", (request, response) => {
   // console.log(request);

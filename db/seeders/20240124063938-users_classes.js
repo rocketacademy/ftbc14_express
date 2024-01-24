@@ -12,23 +12,28 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    await queryInterface.bulkInsert("users_addresses", [
+
+    await queryInterface.bulkInsert("users_classes", [
       {
         user_id: 1,
-        address: "211, Bedok lane",
-        primary_address: true,
+        class_id: 1,
       },
       {
         user_id: 2,
-        address: "5, Orchard Road",
-        primary_address: false,
+        class_id: 2,
       },
       {
         user_id: 3,
-        address: "99, Tree Road",
-        primary_address: true,
+        class_id: 3,
       },
-      { user_id: 2, address: "4 Strone Avenue", primary_address: true },
+      {
+        user_id: 2,
+        class_id: 4,
+      },
+      {
+        user_id: 3,
+        class_id: 1,
+      },
     ]);
   },
 
@@ -39,6 +44,7 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete("users_addresses", null, {});
+
+    await queryInterface.bulkDelete("users_classes", null, {});
   },
 };

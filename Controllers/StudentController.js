@@ -1,7 +1,8 @@
 class StudentController {
-  constructor(user, usersAddress) {
+  constructor(user, users_classes, classes) {
     this.user = user;
-    this.usersAddress = usersAddress;
+    this.usersClasses = users_classes;
+    this.classes = classes;
   }
 
   list = async (req, res) => {
@@ -84,24 +85,34 @@ class StudentController {
     }
   };
 
-  listAddresses = async (req, res) => {
-    console.log("addresses");
+  getUserClasses = async (req, res) => {
+    console.log("LIST users classes");
     try {
-      const output = await this.usersAddress.findAll();
+      console.log(this.user);
+      const output = await this.usersClasses.findAll({
+        include: [this.user, this.classes],
+      }); // return an array
+      console.log("output", output);
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
     }
   };
 
-  listOneAddress = async (req, res) => {
+  addUserClass = async (req, res) => {
     try {
-      const output = await this.usersAddress.findAll({
-        where: {
-          userId: req.params.id,
-        },
-        include: this.user,
-      });
+      console.log(this.user);
+      await this.usersClasses.create({
+        userId: req.body.userId,
+        classId: req.body.classId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }); // return an array
+
+      const output = await this.usersClasses.findAll({
+        include: [this.user, this.classes],
+      }); // return an array
+      console.log("output", output);
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });

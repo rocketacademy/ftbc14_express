@@ -1,10 +1,8 @@
-// app.use('/students', studentRouter)
+// app.use('/class', classRouter.routes())
 
-//http://localhost:8080/students/addresses
-
-class StudentRouter {
-  constructor(studentController, express) {
-    this.controller = studentController;
+class ClassRouter {
+  constructor(classController, express) {
+    this.controller = classController;
     this.express = express;
   }
 
@@ -14,9 +12,6 @@ class StudentRouter {
     // many - many relationship between users and classes.
 
     let router = this.express.Router();
-
-    router.get("/classes", this.controller.getUserClasses);
-    router.post("/classes", this.controller.addUserClass);
 
     router.get("/", this.controller.list);
     router.get("/:id", this.controller.listOne);
@@ -28,4 +23,4 @@ class StudentRouter {
   };
 }
 
-module.exports = StudentRouter;
+module.exports = ClassRouter;

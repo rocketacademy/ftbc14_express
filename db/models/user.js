@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   class Users extends Model {
     static associate(models) {
       this.hasMany(models.users_addresses);
+      this.belongsToMany(models.classes, { through: "users_classes" });
     }
   }
   Users.init(
