@@ -11,6 +11,8 @@ const cors = require("cors");
 const db = require("./db/models/index");
 const { users, users_addresses } = db;
 
+console.log(db);
+
 const StudentRouter = require("./Routers/StudentRouter");
 const StudentController = require("./Controllers/StudentController");
 

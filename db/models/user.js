@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Users.init(
     {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER,
-      },
+      // id: {
+      //   allowNull: false,
+      //   autoIncrement: true,
+      //   primaryKey: true,
+      //   type: DataTypes.INTEGER,
+      // },
       firstName: {
         allowNull: false,
         type: DataTypes.STRING,
@@ -33,16 +33,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.BOOLEAN,
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: new Date(),
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: new Date(),
-      },
+      // createdAt: {
+      //   type: DataTypes.DATE,
+      //   allowNull: false,
+      //   defaultValue: new Date(),
+      // },
+      // updatedAt: {
+      //   type: DataTypes.DATE,
+      //   allowNull: false,
+      //   defaultValue: new Date(),
+      // },
     },
     {
       sequelize,
