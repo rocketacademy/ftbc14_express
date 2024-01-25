@@ -1,6 +1,7 @@
 class ClassController {
-  constructor(classModel) {
+  constructor(classModel, users) {
     this.classModel = classModel;
+    this.usersModel = users;
   }
 
   list = async (req, res) => {
@@ -77,6 +78,20 @@ class ClassController {
 
       const output = await this.classModel.findAll();
 
+      return res.json(output);
+    } catch (err) {
+      return res.status(400).json({ error: true, msg: err });
+    }
+  };
+
+  listClassesUsers = async (req, res) => {
+    console.log("LIST ME Classes");
+    try {
+      console.log(this.classModel);
+      const output = await this.classModel.findAll({
+        include: this.usersModel,
+      }); // return an array
+      console.log("output", output);
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
