@@ -1,30 +1,22 @@
-class StudentController {
-  constructor(user, users_classes, classes) {
-    this.user = user;
+const BaseController = require("./BaseController");
+
+class StudentController extends BaseController {
+  constructor(model, users_classes, classes) {
+    super(model); // inherirt from the base contorller
     this.usersClasses = users_classes;
     this.classes = classes;
   }
 
+  // by default we inherit the list, listOne and delete method from the base controller
+
+  // overwrites the inherited List method
   list = async (req, res) => {
     console.log("LIST ME");
     try {
-      console.log(this.user);
-      const output = await this.user.findAll(); // return an array
+      const output = await this.model.findAll({
+        include: this.classes,
+      }); // return an array
       console.log("output", output);
-      return res.json(output);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  };
-
-  listOne = async (req, res) => {
-    const id = req.params.id;
-    try {
-      // const output = await this.model.findAll({where : {
-      //   id: id
-      // }});
-
-      const output = await this.user.findByPk(id); // return an object
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -34,7 +26,7 @@ class StudentController {
   add = async (req, res) => {
     console.log("posting");
     try {
-      await this.user.create({
+      await this.model.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
@@ -42,7 +34,7 @@ class StudentController {
         createdAt: new Date(),
         updatedAt: new Date(),
       });
-      const output = await this.user.findAll();
+      const output = await this.model.findAll();
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });
@@ -52,7 +44,7 @@ class StudentController {
   edit = async (req, res) => {
     const id = req.params.id;
     try {
-      await this.user.update(
+      await this.model.update(
         {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
@@ -64,20 +56,7 @@ class StudentController {
         { where: { id: id } }
       );
 
-      const output = await this.user.findAll();
-
-      return res.json(output);
-    } catch (err) {
-      return res.status(400).json({ error: true, msg: err });
-    }
-  };
-
-  delete = async (req, res) => {
-    const id = req.params.id;
-    try {
-      await this.user.destroy({ where: { id: id } });
-
-      const output = await this.user.findAll();
+      const output = await this.model.findAll();
 
       return res.json(output);
     } catch (err) {
@@ -88,9 +67,9 @@ class StudentController {
   getUserClasses = async (req, res) => {
     console.log("LIST users classes");
     try {
-      console.log(this.user);
+      console.log(this.model);
       const output = await this.usersClasses.findAll({
-        include: [this.user, this.classes],
+        include: [this.model, this.classes],
       }); // return an array
       console.log("output", output);
       return res.json(output);
@@ -101,7 +80,7 @@ class StudentController {
 
   addUserClass = async (req, res) => {
     try {
-      console.log(this.user);
+      console.log(this.model);
       await this.usersClasses.create({
         userId: req.body.userId,
         classId: req.body.classId,
@@ -110,7 +89,7 @@ class StudentController {
       }); // return an array
 
       const output = await this.usersClasses.findAll({
-        include: [this.user, this.classes],
+        include: [this.model, this.classes],
       }); // return an array
       console.log("output", output);
       return res.json(output);

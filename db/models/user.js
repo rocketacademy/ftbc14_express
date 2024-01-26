@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   // console.log("Model", Model.init, Model.findAll);
   class Users extends Model {
     static associate(models) {
-      this.hasMany(models.users_addresses);
-      this.belongsToMany(models.classes, { through: "users_classes" });
+      this.hasMany(models.usersAddresses);
+      this.belongsToMany(models.classes, { through: "usersClasses" });
     }
   }
   Users.init(
