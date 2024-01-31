@@ -10,11 +10,18 @@ const cors = require("cors");
 
 const db = require("./db/models/index");
 const { users, usersAddresses, classes, usersClasses } = db;
+const cookieParser = require("cookie-parser");
 
 console.log(db);
 
 const StudentRouter = require("./Routers/StudentRouter");
 const StudentController = require("./Controllers/StudentController");
+
+const AuthRouter = require("./Routers/AuthRouter");
+const AuthControllers = require("./Controllers/AuthController");
+
+const authController = new AuthControllers(users);
+const authRouter = new AuthRouter(authController, express);
 
 const studentController = new StudentController(
   users,
@@ -31,7 +38,11 @@ const ClassRouter = require("./Routers/ClassRouter");
 const ClassContoller = require("./Controllers/ClassController");
 
 const addressController = new AddressController(usersAddresses, users);
-const addressRouter = new AddressRouter(addressController, express);
+const addressRouter = new AddressRouter(
+  addressController,
+  express,
+  authController
+);
 
 const classContoller = new ClassContoller(classes, users);
 const classRouter = new ClassRouter(classContoller, express);
@@ -43,6 +54,9 @@ app.use(express.json());
 // allows me to send form requests to my server - and use the body
 app.use(express.urlencoded({ extended: false }));
 
+// allows our refresh tokens to work I hope.
+app.use(cookieParser());
+
 // Sam's custom middlware WOOOO
 const myLoggingFunction = function (req, res, next) {
   console.log("The request url is:", req.url);
@@ -53,7 +67,13 @@ const myLoggingFunction = function (req, res, next) {
 };
 
 // setting up external middleware - allows Cross Origin Resource Sharing
-app.use(cors());
+
+const corsOptions = {
+  origin: true, //included origin as true
+  credentials: true, //included credentials as true
+};
+
+app.use(cors(corsOptions));
 
 // Applying Sams custom middleware
 app.use(myLoggingFunction);
@@ -62,6 +82,7 @@ app.use(myLoggingFunction);
 app.use("/students", studentRouter.route());
 app.use("/addresses", addressRouter.route());
 app.use("/classes", classRouter.route());
+app.use("/auth", authRouter.route());
 
 app.get("/", (request, response) => {
   // console.log(request);

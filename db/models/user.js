@@ -34,6 +34,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.BOOLEAN,
       },
+      password: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+
+      refreshToken: DataTypes.TEXT,
+      verificationToken: DataTypes.TEXT,
+
       // createdAt: {
       //   type: DataTypes.DATE,
       //   allowNull: false,
