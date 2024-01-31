@@ -27,9 +27,14 @@ const studentController = new StudentController(
   users,
   usersClasses,
   classes,
-  usersAddresses
+  usersAddresses,
+  authController
 );
-const studentRouter = new StudentRouter(studentController, express);
+const studentRouter = new StudentRouter(
+  studentController,
+  express,
+  authController
+);
 
 const AddressRouter = require("./Routers/AddressRouter");
 const AddressController = require("./Controllers/AddressController");

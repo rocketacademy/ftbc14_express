@@ -3,9 +3,10 @@
 //http://localhost:8080/students/addresses
 
 class StudentRouter {
-  constructor(studentController, express) {
+  constructor(studentController, express, auth) {
     this.controller = studentController;
     this.express = express;
+    this.auth = auth;
   }
 
   route = () => {
@@ -16,7 +17,7 @@ class StudentRouter {
     let router = this.express.Router();
 
     router.get("/classes", this.controller.getUserClasses);
-    router.post("/classes", this.controller.addUserClass);
+    router.post("/classes", this.auth.verify, this.controller.addUserClass);
 
     router.get("/", this.controller.list);
     router.get("/:id", this.controller.listOne);
