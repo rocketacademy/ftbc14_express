@@ -16,7 +16,12 @@ console.log(db);
 const StudentRouter = require("./Routers/StudentRouter");
 const StudentController = require("./Controllers/StudentController");
 
-const studentController = new StudentController(users, usersClasses, classes);
+const studentController = new StudentController(
+  users,
+  usersClasses,
+  classes,
+  usersAddresses
+);
 const studentRouter = new StudentRouter(studentController, express);
 
 const AddressRouter = require("./Routers/AddressRouter");

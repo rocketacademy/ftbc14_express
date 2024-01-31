@@ -20,6 +20,7 @@ class ClassController extends BaseController {
         updatedAt: new Date(),
       });
       const output = await this.model.findAll();
+      console.log(output);
       return res.json(output);
     } catch (err) {
       return res.status(400).json({ error: true, msg: err });

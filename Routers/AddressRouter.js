@@ -13,6 +13,8 @@ class AddressRouter {
     let router = this.express.Router();
     router.get("/", this.controller.list);
     router.get("/:id", this.controller.listOne);
+    router.post("/", this.controller.add);
+
     return router;
   };
 }

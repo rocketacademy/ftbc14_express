@@ -1,10 +1,11 @@
 const BaseController = require("./BaseController");
 
 class StudentController extends BaseController {
-  constructor(model, users_classes, classes) {
+  constructor(model, usersClasses, classes, usersAddresses) {
     super(model); // inherirt from the base contorller
-    this.usersClasses = users_classes;
+    this.usersClasses = usersClasses;
     this.classes = classes;
+    this.usersAddresses = usersAddresses;
   }
 
   // by default we inherit the list, listOne and delete method from the base controller
@@ -14,7 +15,7 @@ class StudentController extends BaseController {
     console.log("LIST ME");
     try {
       const output = await this.model.findAll({
-        include: this.classes,
+        include: [this.usersAddresses],
       }); // return an array
       console.log("output", output);
       return res.json(output);
