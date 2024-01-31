@@ -1,9 +1,10 @@
 // app.use('/addresses', addressRouter)
 
 class AddressRouter {
-  constructor(addressController, express) {
+  constructor(addressController, express, checkJWT) {
     this.controller = addressController;
     this.express = express;
+    this.checkJWT = checkJWT;
   }
 
   route = () => {
@@ -13,7 +14,7 @@ class AddressRouter {
     let router = this.express.Router();
     router.get("/", this.controller.list);
     router.get("/:id", this.controller.listOne);
-    router.post("/", this.controller.add);
+    router.post("/", this.checkJWT, this.controller.add);
 
     return router;
   };

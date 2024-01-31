@@ -7,6 +7,14 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const { auth } = require("express-oauth2-jwt-bearer");
+
+require("dotenv").config();
+
+const checkJWT = auth({
+  audience: process.env.AUTH_AUDIENCE,
+  issuerBaseURL: process.env.AUTH_ISSUER,
+});
 
 const db = require("./db/models/index");
 const { users, usersAddresses, classes, usersClasses } = db;
@@ -22,7 +30,7 @@ const studentController = new StudentController(
   classes,
   usersAddresses
 );
-const studentRouter = new StudentRouter(studentController, express);
+const studentRouter = new StudentRouter(studentController, express, checkJWT);
 
 const AddressRouter = require("./Routers/AddressRouter");
 const AddressController = require("./Controllers/AddressController");
@@ -31,10 +39,10 @@ const ClassRouter = require("./Routers/ClassRouter");
 const ClassContoller = require("./Controllers/ClassController");
 
 const addressController = new AddressController(usersAddresses, users);
-const addressRouter = new AddressRouter(addressController, express);
+const addressRouter = new AddressRouter(addressController, express, checkJWT);
 
 const classContoller = new ClassContoller(classes, users);
-const classRouter = new ClassRouter(classContoller, express);
+const classRouter = new ClassRouter(classContoller, express, checkJWT);
 
 // inbuilt middleware
 // allows me to send JSON requests to my server - and use the body
