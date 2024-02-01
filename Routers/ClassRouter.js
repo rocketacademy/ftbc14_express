@@ -1,9 +1,10 @@
 // app.use('/classes', classRouter.routes())
 
 class ClassRouter {
-  constructor(classController, express) {
+  constructor(classController, express, auth) {
     this.controller = classController;
     this.express = express;
+    this.auth = auth;
   }
 
   route = () => {
@@ -15,7 +16,7 @@ class ClassRouter {
     router.get("/users", this.controller.listClassesUsers);
     router.get("/", this.controller.list);
     router.get("/:id", this.controller.listOne);
-    router.post("/", this.controller.add);
+    router.post("/", this.auth.verify, this.controller.add);
     router.put("/:id", this.controller.edit);
     router.delete("/:id", this.controller.delete);
 

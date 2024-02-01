@@ -50,7 +50,7 @@ const addressRouter = new AddressRouter(
 );
 
 const classContoller = new ClassContoller(classes, users);
-const classRouter = new ClassRouter(classContoller, express);
+const classRouter = new ClassRouter(classContoller, express, authController);
 
 // inbuilt middleware
 // allows me to send JSON requests to my server - and use the body

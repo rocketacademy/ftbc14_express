@@ -13,8 +13,8 @@ class AuthRouter {
     let router = this.express.Router();
     router.post("/signup", this.controller.signUp);
     router.post("/signin", this.controller.signIn);
-    router.get("/refresh", this.controller.refreshToken);
     router.get("/signout", this.controller.signOut);
+    router.get("/refresh", this.controller.refreshToken);
 
     return router;
   };

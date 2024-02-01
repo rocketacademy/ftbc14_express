@@ -139,8 +139,8 @@ class AuthController {
     // if (!cookies?["jwt-refresh"]) {
     //   return res.sendStatus(204); // Successful req, nothing to send back
     // }
-    const refreshToken = cookies["jwt-refresh"];
-    const foundUser = await this.model.findOne({ where: { refreshToken } });
+    // const refreshToken = cookies["jwt-refresh"];
+    // const foundUser = await this.model.findOne({ where: { refreshToken } });
     if (!foundUser) {
       res.clearCookie("jwt-refresh", {
         secure: false,
